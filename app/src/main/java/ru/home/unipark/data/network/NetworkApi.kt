@@ -1,6 +1,11 @@
 package ru.home.unipark.data.network
 
 import io.reactivex.Single
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import ru.home.unipark.data.network.model.request.AuthRequest
 import ru.home.unipark.data.network.model.request.RegRequest
@@ -20,4 +25,34 @@ interface NetworkApi {
 
     @GET("/v2/transports/filter?city_id=1&transport_type_id=18")
     fun getTransports(@Header("token") token: String)
+
+    companion object Factory {
+
+        private val BASE_URL = "https://testapi.unipark.kz/"
+
+        fun create(): NetworkApi {
+            val retrofit = Retrofit.Builder()
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(BASE_URL)
+                .client(initClient())
+                .build()
+            return retrofit.create(NetworkApi::class.java)
+        }
+
+        private fun initClient(): OkHttpClient {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            val builder = OkHttpClient.Builder()
+            builder.addInterceptor(interceptor)
+                .addInterceptor { chain ->
+                    val newRequest = chain.request().newBuilder()
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("api-version", "21")
+                        .build()
+                    chain.proceed(newRequest)
+                }
+            return builder.build()
+        }
+    }
 }
