@@ -1,11 +1,16 @@
 package ru.home.unipark.domain
 
-import io.reactivex.Single
+import io.reactivex.Completable
+import ru.home.unipark.data.prefs.PrefStorage
 
 class SignIn {
 
-    public fun execute(): Single<Boolean>? {
-       return null
-    }
+    private val pref = PrefStorage()
 
+    fun execute(): Completable {
+       return pref.read()
+           .flatMapCompletable {
+               Completable.complete()
+           }
+    }
 }
