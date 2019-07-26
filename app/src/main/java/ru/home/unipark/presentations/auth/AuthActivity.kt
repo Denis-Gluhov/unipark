@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_auth.*
 import ru.home.unipark.R
@@ -14,7 +13,6 @@ import ru.home.unipark.presentations.transport.TransportActivity
 class AuthActivity : AppCompatActivity(), AuthView {
 
     private lateinit var presenter: AuthPresenter
-    private lateinit var pbLoadAuth: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,17 +22,19 @@ class AuthActivity : AppCompatActivity(), AuthView {
     }
 
     private fun initUi() {
-        btnSignInAuth.setOnClickListener { presenter.auth(etPhoneAuth.text.toString(),
-            etPasswordAuth.text.toString()) }
+        btnSignInAuth.setOnClickListener {
+            presenter.auth(etPhoneAuth.text.toString(), etPasswordAuth.text.toString()) }
         tvRegAuth.setOnClickListener { presenter.reg() }
     }
 
     override fun onShowLoad() {
         pbLoadAuth.visibility = VISIBLE
+        btnSignInAuth.visibility = GONE
     }
 
     override fun onHideLoad() {
         pbLoadAuth.visibility = GONE
+        btnSignInAuth.visibility = VISIBLE
     }
 
     override fun onShowErrorEmptyPhone() {

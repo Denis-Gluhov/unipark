@@ -27,7 +27,6 @@ interface NetworkApi {
     fun getTransports(@Header("token") token: String)
 
     companion object Factory {
-
         private val BASE_URL = "https://testapi.unipark.kz/"
 
         fun create(): NetworkApi {

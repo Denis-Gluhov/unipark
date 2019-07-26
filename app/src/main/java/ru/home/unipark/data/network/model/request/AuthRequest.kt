@@ -10,8 +10,8 @@ class AuthRequest(
     val password: String,
 
     @SerializedName("phone_type")
-    val phoneType: Int = 1,
+    val phoneType: Int,
 
     @SerializedName("phone_token")
-    val phoneToken: String? = null
+    val phoneToken: String?
 )
