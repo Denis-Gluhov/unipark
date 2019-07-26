@@ -26,7 +26,7 @@ class AuthPresenter (
                     .subscribe({
                         view.onShowTransportScreen()
                         view.onExitThisScreen()
-                    }) { }
+                    }) { /****/ }
             }
         }
     }

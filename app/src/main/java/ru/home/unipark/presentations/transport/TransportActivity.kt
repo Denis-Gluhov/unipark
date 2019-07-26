@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_transport.*
 import ru.home.unipark.R
 import ru.home.unipark.presentations.auth.AuthActivity
@@ -11,6 +13,7 @@ import ru.home.unipark.presentations.auth.AuthActivity
 class TransportActivity : AppCompatActivity(), TransportView {
 
     private lateinit var presenter: TransportPresenter
+    private lateinit var adapter: TransportAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,12 +22,30 @@ class TransportActivity : AppCompatActivity(), TransportView {
         initUi()
     }
 
+    override fun onStart() {
+        super.onStart()
+        presenter.loadTransport()
+    }
+
     private fun initUi() {
         tbTransport.inflateMenu(R.menu.transport_menu_toolbar)
         tbTransport.setOnMenuItemClickListener {
             presenter.requestAppExit()
             true
         }
+        rlRefreshTransport.setOnRefreshListener {
+            presenter.loadTransport()
+        }
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        val recyclerView = rvListTransport
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        recyclerView.setHasFixedSize(true)
+        adapter = TransportAdapter()
+        recyclerView.adapter = adapter
     }
 
     override fun onShowDialogRequestAppExit() {
@@ -36,12 +57,16 @@ class TransportActivity : AppCompatActivity(), TransportView {
 
     }
 
+    override fun onSetData(data: List<Transport>) {
+        adapter.updateData(data)
+    }
+
     override fun onShowLoad() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        rlRefreshTransport.isRefreshing = true
     }
 
     override fun onHideLoad() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        rlRefreshTransport.isRefreshing = false
     }
 
     override fun onShowAuthScreen() {

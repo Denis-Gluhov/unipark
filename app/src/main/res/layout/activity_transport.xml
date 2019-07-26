@@ -13,9 +13,13 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:title="Транспорт"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvListTransport"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/rlRefreshTransport"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvListTransport"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

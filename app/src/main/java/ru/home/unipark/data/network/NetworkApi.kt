@@ -7,15 +7,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import ru.home.unipark.data.network.model.request.AuthRequest
 import ru.home.unipark.data.network.model.request.RegRequest
-import ru.home.unipark.data.network.model.response.AuthData
-import ru.home.unipark.data.network.model.response.QuitData
-import ru.home.unipark.data.network.model.response.RegData
-import ru.home.unipark.data.network.model.response.Response
+import ru.home.unipark.data.network.model.request.TransportRequest
+import ru.home.unipark.data.network.model.response.*
 
 interface NetworkApi {
     @POST("/v2/users/auth")
@@ -27,8 +24,9 @@ interface NetworkApi {
     @POST("/v2/users")
     fun reg(@Body request: RegRequest): Single<Response<RegData>>
 
-    @GET("/v2/transports/filter?city_id=1&transport_type_id=18")
-    fun getTransports(@Header("token") token: String)
+    @POST("/v2/transports/filter")
+    fun getTransports(@Header("Authorization") token: String,
+                      @Body request: TransportRequest): Single<Response<List<TransportData>>>
 
     companion object Factory {
         private val BASE_URL = "https://testapi.unipark.kz/"

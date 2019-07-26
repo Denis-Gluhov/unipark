@@ -13,6 +13,21 @@ class TransportPresenter(
     private val transport = TransportsUseCase()
     private val quit = QuitUseCase()
 
+    fun loadTransport() {
+        disposables += transport.execute()
+            .toObservable()
+            .flatMapIterable { it }
+            .map {  Transport(it.price, it.name, it.driverName, it.transportNumber) }
+            .toList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { view.onShowLoad() }
+            .doAfterTerminate { view.onHideLoad() }
+            .subscribe({
+                view.onSetData(it)
+            }) { /***/ }
+    }
+
     fun requestAppExit() {
         view.onShowDialogRequestAppExit()
     }
@@ -24,7 +39,6 @@ class TransportPresenter(
             .subscribe({
                 view.onShowAuthScreen()
                 view.onExitThisScreen()
-            }) {}
+            }) { /***/ }
     }
-
 }
