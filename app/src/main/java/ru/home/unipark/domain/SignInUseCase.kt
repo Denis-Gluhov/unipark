@@ -3,7 +3,7 @@ package ru.home.unipark.domain
 import io.reactivex.Completable
 import ru.home.unipark.data.prefs.PrefStorage
 
-class SignIn {
+class SignInUseCase {
 
     private val pref = PrefStorage()
 

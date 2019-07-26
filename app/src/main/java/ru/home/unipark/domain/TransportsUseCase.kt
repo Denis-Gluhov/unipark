@@ -1,4 +1,4 @@
 package ru.home.unipark.domain
 
-class Quit {
+class TransportsUseCase {
 }
